@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGP - Tableau de bord</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        sidebar: '#1e293b',
+                        activeMenu: '#3b82f6',
+                        bgLight: '#f8fafc',
+                        brandGreen: '#10b981',
+                        brandBlue: '#3b82f6',
+                        brandOrange: '#f59e0b',
+                        brandPurple: '#8b5cf6',
+                        brandRed: '#ef4444',
+                        brandCyan: '#06b6d4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Personnalisation de la barre de défilement pour les tableaux */
+        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .sidebar-item:hover { background-color: rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body class="bg-bgLight text-slate-800 font-sans flex h-screen overflow-hidden">
+
+    <aside class="w-64 bg-sidebar text-slate-300 flex flex-col h-full shrink-0">
+        <div class="h-20 flex items-center px-6 border-b border-slate-700">
+            <div class="w-10 h-10 bg-white rounded flex items-center justify-center mr-3">
+                <i class="fa-solid fa-building text-brandGreen text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-white font-bold text-xl leading-tight">SIGP</h1>
+                <p class="text-[10px] text-slate-400 leading-tight">Système Intégré de<br>Gestion de Projets</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4 text-sm font-medium">
+            <a href="#" class="flex items-center px-6 py-3 bg-activeMenu text-white">
+                <i class="fa-solid fa-house w-6"></i> Tableau de bord
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-folder-open w-6"></i> Projets</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-calendar-days w-6"></i> PTBA</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-chart-simple w-6"></i> Suivi physique</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-coins w-6"></i> Suivi financier</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-cart-shopping w-6"></i> Marchés</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-bullseye w-6"></i> Produits / Résultats</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item">
+                <i class="fa-regular fa-star w-6"></i> Bonnes pratiques
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item">
+                <i class="fa-solid fa-book-open w-6"></i> Leçons apprises
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item">
+                <i class="fa-solid fa-triangle-exclamation w-6"></i> Difficultés
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item">
+                <i class="fa-solid fa-bullhorn w-6"></i> Recommandations
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-regular fa-file-lines w-6"></i> Documents</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-chart-pie w-6"></i> Rapports</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item">
+                <i class="fa-solid fa-users w-6"></i> Utilisateurs
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 sidebar-item justify-between">
+                <div class="flex items-center"><i class="fa-solid fa-gear w-6"></i> Paramètres</div>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-700">
+            <a href="#" class="flex items-center text-sm font-medium hover:text-white">
+                <i class="fa-solid fa-power-off w-6"></i> Déconnexion
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-full overflow-hidden">
+        
+        <header class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0">
+            <div class="flex items-center gap-4">
+                <button class="text-slate-500 hover:text-slate-700"><i class="fa-solid fa-bars text-xl"></i></button>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <div class="flex items-center border border-slate-300 rounded px-3 py-1.5 bg-white">
+                    <span class="text-sm text-slate-500 mr-2">Exercice budgétaire :</span>
+                    <select class="text-sm font-medium bg-transparent outline-none">
+                        <option>2024</option>
+                    </select>
+                    <i class="fa-regular fa-calendar ml-3 text-slate-400"></i>
+                </div>
+
+                <div class="flex items-center gap-4 text-slate-500">
+                    <div class="relative cursor-pointer hover:text-slate-800">
+                        <i class="fa-regular fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-brandRed text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">3</span>
+                    </div>
+                    <div class="relative cursor-pointer hover:text-slate-800">
+                        <i class="fa-regular fa-envelope text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-brandRed text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">5</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 border-l border-slate-200 pl-6 cursor-pointer">
+                    <img src="https://ui-avatars.com/api/?name=Jean+Kouassi&background=e2e8f0&color=1e293b" alt="User" class="w-10 h-10 rounded-full">
+                    <div>
+                        <p class="text-sm font-bold text-slate-800">Jean KOUASSI</p>
+                        <p class="text-xs text-slate-500">Coordonnateur</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-slate-800">Tableau de bord</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 text-brandBlue flex items-center justify-center text-xl shrink-0"><i class="fa-regular fa-folder-open"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Projets actifs</p>
+                            <p class="text-2xl font-bold text-brandBlue">24</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandBlue">
+                        Voir tous <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-green-100 text-brandGreen flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Budget total (FCFA)</p>
+                            <p class="text-xl font-bold text-brandGreen mt-1">12,450,000,000</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandGreen">
+                        Voir détails <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-orange-100 text-brandOrange flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-chart-simple"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Taux exécution physique</p>
+                            <p class="text-2xl font-bold text-brandOrange">68.45 %</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandOrange">
+                        Voir détails <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-purple-100 text-brandPurple flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-wallet"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Taux exécution financière</p>
+                            <p class="text-2xl font-bold text-brandPurple">57.32 %</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandPurple">
+                        Voir détails <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-cyan-100 text-brandCyan flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Marchés actifs</p>
+                            <p class="text-2xl font-bold text-brandCyan">38</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandCyan">
+                        Voir détails <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 flex flex-col justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-red-100 text-brandRed flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                            <p class="text-xs font-semibold text-slate-500 uppercase">Difficultés ouvertes</p>
+                            <p class="text-2xl font-bold text-brandRed">17</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-400 font-medium flex justify-between items-center cursor-pointer hover:text-brandRed">
+                        Voir détails <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-sm">Taux d'exécution physique vs financière</h3>
+                        <select class="text-xs border border-slate-200 rounded px-2 py-1 text-slate-500 bg-white">
+                            <option>Année en cours</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 relative min-h-[200px]">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col relative">
+                    <h3 class="font-bold text-sm mb-4">Exécution financière (FCFA)</h3>
+                    <div class="flex items-center justify-between flex-1">
+                        <div class="w-1/2 relative h-[180px]">
+                            <canvas id="doughnutFin"></canvas>
+                        </div>
+                        <div class="w-1/2 pl-4 flex flex-col justify-center gap-3">
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600 mb-1"><span class="w-2 h-2 rounded-full bg-brandBlue mr-2"></span> Montant payé (FCFA)</div>
+                                <div class="text-xs font-bold pl-4">7,140,000,000 (57.32%)</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600 mb-1"><span class="w-2 h-2 rounded-full bg-brandGreen mr-2"></span> Montant engagé</div>
+                                <div class="text-xs font-bold pl-4">8,230,000,000 (66.12%)</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600 mb-1"><span class="w-2 h-2 rounded-full bg-brandOrange mr-2"></span> Solde disponible</div>
+                                <div class="text-xs font-bold pl-4">4,220,000,000 (33.88%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="text-xs font-medium text-brandBlue bg-blue-50 px-4 py-1.5 rounded hover:bg-blue-100 transition">Voir détails financiers</button>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col relative">
+                    <h3 class="font-bold text-sm mb-4">Statut des projets</h3>
+                    <div class="flex items-center justify-between flex-1">
+                        <div class="w-1/2 relative h-[180px]">
+                            <canvas id="doughnutProj"></canvas>
+                        </div>
+                        <div class="w-1/2 pl-4 flex flex-col justify-center gap-2">
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600"><span class="w-2 h-2 rounded-full bg-brandGreen mr-2"></span> En cours</div>
+                                <div class="text-xs font-bold pl-4 text-slate-500">14 (58.33%)</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600"><span class="w-2 h-2 rounded-full bg-brandBlue mr-2"></span> Préparation</div>
+                                <div class="text-xs font-bold pl-4 text-slate-500">5 (20.83%)</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600"><span class="w-2 h-2 rounded-full bg-brandOrange mr-2"></span> Suspendus</div>
+                                <div class="text-xs font-bold pl-4 text-slate-500">3 (12.50%)</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center text-xs text-slate-600"><span class="w-2 h-2 rounded-full bg-brandRed mr-2"></span> Clôturés</div>
+                                <div class="text-xs font-bold pl-4 text-slate-500">2 (8.33%)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="text-xs font-medium text-brandBlue bg-blue-50 px-4 py-1.5 rounded hover:bg-blue-100 transition">Voir tous les projets</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-sm">Projets récents</h3>
+                        <button class="text-xs bg-slate-100 text-brandBlue px-3 py-1 rounded hover:bg-slate-200">Voir tous</button>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="text-slate-500 border-b border-slate-100">
+                                <tr>
+                                    <th class="font-semibold py-2">Code projet</th>
+                                    <th class="font-semibold py-2">Intitulé du projet</th>
+                                    <th class="font-semibold py-2">Statut</th>
+                                    <th class="font-semibold py-2 text-center">Taux physique</th>
+                                    <th class="font-semibold py-2 text-center">Taux financier</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700">
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-3">P001</td>
+                                    <td class="py-3 truncate max-w-[150px]">Amélioration de l'irrigation<br>goutte-à-goutte à Ouagadougou</td>
+                                    <td class="py-3"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                    <td class="py-3 text-center font-medium">75%</td>
+                                    <td class="py-3 text-center font-medium">62%</td>
+                                    <td class="py-3 text-right"><i class="fa-solid fa-ellipsis-vertical text-slate-400 cursor-pointer"></i></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-3">P002</td>
+                                    <td class="py-3 truncate max-w-[150px]">Création de jardins collectifs pour<br>jeunes à Bobo-Dioulasso</td>
+                                    <td class="py-3"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                    <td class="py-3 text-center font-medium">60%</td>
+                                    <td class="py-3 text-center font-medium">55%</td>
+                                    <td class="py-3 text-right"><i class="fa-solid fa-ellipsis-vertical text-slate-400 cursor-pointer"></i></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-3">P003</td>
+                                    <td class="py-3 truncate max-w-[150px]">Formation aux pratiques<br>d'agroécologie urbaine</td>
+                                    <td class="py-3"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                    <td class="py-3 text-center font-medium">80%</td>
+                                    <td class="py-3 text-center font-medium">73%</td>
+                                    <td class="py-3 text-right"><i class="fa-solid fa-ellipsis-vertical text-slate-400 cursor-pointer"></i></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-3">P004</td>
+                                    <td class="py-3 truncate max-w-[150px]">Soutien aux micro-fermes pilotes<br>de micro-poussins</td>
+                                    <td class="py-3"><span class="bg-orange-100 text-brandOrange px-2 py-0.5 rounded font-medium text-[10px]">Suspendu</span></td>
+                                    <td class="py-3 text-center font-medium">40%</td>
+                                    <td class="py-3 text-center font-medium">30%</td>
+                                    <td class="py-3 text-right"><i class="fa-solid fa-ellipsis-vertical text-slate-400 cursor-pointer"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3">P005</td>
+                                    <td class="py-3 truncate max-w-[150px]">Mise en place de compostage<br>urbain à Koudougou</td>
+                                    <td class="py-3"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                    <td class="py-3 text-center font-medium">65%</td>
+                                    <td class="py-3 text-center font-medium">50%</td>
+                                    <td class="py-3 text-right"><i class="fa-solid fa-ellipsis-vertical text-slate-400 cursor-pointer"></i></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-auto pt-3 text-center">
+                        <a href="#" class="text-xs text-brandBlue font-medium hover:underline">Voir plus</a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-sm">Marchés récents</h3>
+                        <button class="text-xs bg-slate-100 text-brandBlue px-3 py-1 rounded hover:bg-slate-200">Voir tous</button>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="text-slate-500 border-b border-slate-100">
+                                <tr>
+                                    <th class="font-semibold py-2">Référence</th>
+                                    <th class="font-semibold py-2">Intitulé</th>
+                                    <th class="font-semibold py-2 text-center">Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-slate-700">
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-4">M001/2024</td>
+                                    <td class="py-4 truncate max-w-[180px]">Fourniture de semences<br>maraîchères locales</td>
+                                    <td class="py-4 text-center"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">Approuvé</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-4">M002/2024</td>
+                                    <td class="py-4 truncate max-w-[180px]">Achat d'équipements d'irrigation<br>solaire</td>
+                                    <td class="py-4 text-center"><span class="bg-blue-100 text-brandBlue px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-4">M003/2024</td>
+                                    <td class="py-4 truncate max-w-[180px]">Formation en commercialisation<br>urbaine</td>
+                                    <td class="py-4 text-center"><span class="bg-green-100 text-brandGreen px-2 py-0.5 rounded font-medium text-[10px]">Approuvé</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-50">
+                                    <td class="py-4">M004/2024</td>
+                                    <td class="py-4 truncate max-w-[180px]">Installation d'équipements de<br>culture hydroponique</td>
+                                    <td class="py-4 text-center"><span class="bg-blue-100 text-brandBlue px-2 py-0.5 rounded font-medium text-[10px]">En cours</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4">M005/2024</td>
+                                    <td class="py-4 truncate max-w-[180px]">Conseil en certification bio locale</td>
+                                    <td class="py-4 text-center"><span class="bg-red-100 text-brandRed px-2 py-0.5 rounded font-medium text-[10px]">Résilié</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-auto pt-3 text-center">
+                        <a href="#" class="text-xs text-brandBlue font-medium hover:underline">Voir plus</a>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-6">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex-1 flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-sm">Difficultés récentes</h3>
+                            <button class="text-xs bg-slate-100 text-brandBlue px-3 py-1 rounded hover:bg-slate-200">Voir tous</button>
+                        </div>
+                        <ul class="text-xs space-y-4 text-slate-600">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation text-brandOrange mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Pénurie d'eau pour parcelles urbaines (Ouaga)</span>
+                                    <span class="text-slate-400">15/05/2024</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation text-brandOrange mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Qualité du sol urbain insuffisante (Bobo)</span>
+                                    <span class="text-slate-400">14/05/2024</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation text-brandOrange mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Retard de livraison des intrants agricoles</span>
+                                    <span class="text-slate-400">12/05/2024</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-triangle-exclamation text-brandOrange mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Accès limité aux marchés locaux pour les produits</span>
+                                    <span class="text-slate-400">10/05/2024</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5 flex-1 flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-sm">Recommandations en cours</h3>
+                            <button class="text-xs bg-slate-100 text-brandBlue px-3 py-1 rounded hover:bg-slate-200">Voir tous</button>
+                        </div>
+                        <ul class="text-xs space-y-4 text-slate-600">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-lock-open text-brandRed mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Prioriser les cultures résilientes à la sécheresse</span>
+                                    <span class="text-slate-500">En cours</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-lock-open text-brandRed mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Renforcer le suivi technique de terrain</span>
+                                    <span class="text-slate-500">En cours</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-lock-open text-brandRed mt-0.5"></i>
+                                <div class="flex-1 flex justify-between">
+                                    <span>Améliorer la commercialisation des récoltes</span>
+                                    <span class="text-slate-500">Non démarrée</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-sm mb-3">Actions rapides</h3>
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-brandBlue flex items-center justify-center"><i class="fa-solid fa-plus"></i></div>
+                        Nouveau projet
+                    </button>
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-green-100 text-brandGreen flex items-center justify-center"><i class="fa-solid fa-clipboard-list"></i></div>
+                        Enregistrer activité
+                    </button>
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 text-brandPurple flex items-center justify-center"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                        Enregistrer dépense
+                    </button>
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-orange-100 text-brandOrange flex items-center justify-center"><i class="fa-solid fa-cart-arrow-down"></i></div>
+                        Ajouter marché
+                    </button>
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-brandBlue flex items-center justify-center"><i class="fa-regular fa-folder-open"></i></div>
+                        Ajouter document
+                    </button>
+                    <button class="bg-white border border-slate-200 rounded-lg shadow-sm px-4 py-2.5 flex items-center gap-3 hover:bg-slate-50 transition text-sm font-medium text-slate-700">
+                        <div class="w-8 h-8 rounded-full bg-green-100 text-brandGreen flex items-center justify-center"><i class="fa-solid fa-file-invoice"></i></div>
+                        Générer rapport
+                    </button>
+                </div>
+            </div>
+
+            <br><br> </div>
+    </main>
+
+    <script>
+        // Configuration Globale Chart.js
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.color = '#64748b';
+
+        // 1. Line Chart (Taux exécution physique vs financière)
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['T1 2023', 'T2 2023', 'T3 2023', 'T4 2023', 'T1 2024', 'T2 2024'],
+                datasets: [
+                    {
+                        label: 'Physique (%)',
+                        data: [45, 52, 58, 63, 68, 68.45],
+                        borderColor: '#10b981', // brandGreen
+                        backgroundColor: '#10b981',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        borderWidth: 2
+                    },
+                    {
+                        label: 'Financière (%)',
+                        data: [30, 35, 41, 48, 53, 57.32],
+                        borderColor: '#3b82f6', // brandBlue
+                        backgroundColor: '#3b82f6',
+                        tension: 0.4,
+                        pointRadius: 4,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top', labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'circle' } }
+                },
+                scales: {
+                    y: { min: 0, max: 100, ticks: { callback: function(value){return value + "%"} }, grid: { color: '#f1f5f9' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. Doughnut Chart (Exécution financière)
+        const ctxDoughnutFin = document.getElementById('doughnutFin').getContext('2d');
+        new Chart(ctxDoughnutFin, {
+            type: 'doughnut',
+            data: {
+                labels: ['Montant payé', 'Montant engagé', 'Solde disponible'],
+                datasets: [{
+                    data: [57.32, 8.8, 33.88], // Ajusté visuellement
+                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: true } }
+            },
+            plugins: [{
+                id: 'textCenter1',
+                beforeDraw: function(chart) {
+                    var width = chart.width, height = chart.height, ctx = chart.ctx;
+                    ctx.restore();
+                    ctx.textBaseline = "middle";
+                    
+                    var text1 = "12,450,000,000",
+                        textX1 = Math.round((width - ctx.measureText(text1).width) / 2),
+                        textY1 = height / 2 - 5;
+                    ctx.font = "bold 12px Inter";
+                    ctx.fillStyle = "#1e293b";
+                    ctx.fillText(text1, textX1, textY1);
+
+                    var text2 = "Budget total",
+                        textX2 = Math.round((width - ctx.measureText(text2).width) / 2) + 20,
+                        textY2 = height / 2 + 12;
+                    ctx.font = "10px Inter";
+                    ctx.fillStyle = "#64748b";
+                    ctx.fillText(text2, textX2, textY2);
+                    ctx.save();
+                }
+            }]
+        });
+
+        // 3. Doughnut Chart (Statut des projets)
+        const ctxDoughnutProj = document.getElementById('doughnutProj').getContext('2d');
+        new Chart(ctxDoughnutProj, {
+            type: 'doughnut',
+            data: {
+                labels: ['En cours', 'Préparation', 'Suspendus', 'Clôturés'],
+                datasets: [{
+                    data: [14, 5, 3, 2],
+                    backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444'],
+                    borderWidth: 0,
+                    cutout: '75%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: true } }
+            },
+            plugins: [{
+                id: 'textCenter2',
+                beforeDraw: function(chart) {
+                    var width = chart.width, height = chart.height, ctx = chart.ctx;
+                    ctx.restore();
+                    ctx.textBaseline = "middle";
+                    
+                    var text1 = "24",
+                        textX1 = Math.round((width - ctx.measureText(text1).width) / 2),
+                        textY1 = height / 2 - 5;
+                    ctx.font = "bold 20px Inter";
+                    ctx.fillStyle = "#1e293b";
+                    ctx.fillText(text1, textX1, textY1);
+
+                    var text2 = "Total",
+                        textX2 = Math.round((width - ctx.measureText(text2).width) / 2) + 8,
+                        textY2 = height / 2 + 15;
+                    ctx.font = "12px Inter";
+                    ctx.fillStyle = "#64748b";
+                    ctx.fillText(text2, textX2, textY2);
+                    ctx.save();
+                }
+            }]
+        });
+    </script>
+</body>
+</html>
